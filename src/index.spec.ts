@@ -1,32 +1,17 @@
-// @ts-ignore see https://github.com/jest-community/jest-extended#setup
-import * as matchers from "jest-extended";
-import fc from "fast-check";
+import isLeapYear from ".";
 
-expect.extend(matchers);
-
-test("A simple test (Jest)", () => {
-  expect(1 + 1).toEqual(2);
+test("By default, a year is NOT leap", () => {
+  expect(isLeapYear(2023)).toEqual(false);
 });
 
-test("Additional matchers (jest-extended)", () => {
-  expect([1, 0]).toIncludeSameMembers([0, 1]);
+test("A year is leap if it is divisible by 4", () => {
+  expect(isLeapYear(2024)).toEqual(true);
 });
 
-test("Property-based testing (fast-check)", () => {
-  type Boundaries = {
-    min: number;
-    max: number;
-  };
+test("A year is NOT leap if it is divisible by 100", () => {
+  expect(isLeapYear(2100)).toEqual(false);
+});
 
-  const minmax =
-    ({ min, max }: Boundaries) =>
-    (n: number): number =>
-      Math.min(max, Math.max(min, n));
-
-  fc.assert(
-    fc.property(fc.integer(), (n): boolean => {
-      const result = minmax({ min: 1, max: 10 })(n);
-      return 1 <= result && result <= 10;
-    })
-  );
+test("A year is leap if it is divisible by 400", () => {
+  expect(isLeapYear(2400)).toEqual(true);
 });
